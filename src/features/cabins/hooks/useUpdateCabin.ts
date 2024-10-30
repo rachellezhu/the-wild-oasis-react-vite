@@ -1,30 +1,30 @@
 import { UseMutateFunction, useMutation, useQueryClient } from "react-query";
-import { editExistingCabin, newCabin } from "../../../services/apiCabins";
+import { editExistingCabin, NewCabinType } from "../../../services/apiCabins";
 import toast from "react-hot-toast";
 import { Tables } from "../../../types/supabase-type";
 
-type UseEditCabinType = {
-  isEditing: boolean;
-  editCabin: UseMutateFunction<
+type UseUpdateCabinType = {
+  isUpdating: boolean;
+  updateCabin: UseMutateFunction<
     Tables<"cabins">,
     Error,
     {
-      cabin: newCabin;
+      cabin: NewCabinType;
       id: Tables<"cabins">["id"];
     },
     unknown
   >;
 };
 
-export function useEditCabin(): UseEditCabinType {
+export function useUpdateCabin(): UseUpdateCabinType {
   const queryClient = useQueryClient();
 
-  const { mutate: editCabin, isLoading: isEditing } = useMutation({
+  const { mutate: updateCabin, isLoading: isUpdating } = useMutation({
     mutationFn: ({
       cabin,
       id,
     }: {
-      cabin: newCabin;
+      cabin: NewCabinType;
       id: Tables<"cabins">["id"];
     }) => editExistingCabin(cabin, id),
     onSuccess: () => {
@@ -36,5 +36,5 @@ export function useEditCabin(): UseEditCabinType {
     },
   });
 
-  return { isEditing, editCabin };
+  return { isUpdating, updateCabin };
 }

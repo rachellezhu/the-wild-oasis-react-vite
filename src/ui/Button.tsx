@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 
 type ButtonProps = {
-  readonly size?: "small" | "medium" | "large";
-  readonly variation?: "primary" | "secondary" | "danger";
+  readonly $size?: "small" | "medium" | "large";
+  readonly $variation?: "primary" | "secondary" | "danger";
 };
 
 const sizes = {
@@ -58,13 +58,13 @@ const Button = styled.button<ButtonProps>`
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
 
-  ${(props) => sizes[props.size!]}
-  ${(props) => variations[props.variation!]}
+  ${(props) => (props.$size ? sizes[props.$size!] : "medium")}
+  ${(props) => (props.$variation ? variations[props.$variation!] : "primary")}
 `;
 
 Button.defaultProps = {
-  variation: "primary",
-  size: "medium",
+  $variation: "primary",
+  $size: "medium",
 };
 
 export default Button;

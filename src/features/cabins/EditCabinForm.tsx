@@ -6,10 +6,10 @@ import Button from "../../ui/Button";
 import FormRow from "../../ui/FormRow";
 
 import { useForm } from "react-hook-form";
-import { newCabin } from "../../services/apiCabins";
+import { NewCabinType } from "../../services/apiCabins";
 import { Tables } from "../../types/supabase-type";
 import { useCreateCabin } from "./hooks/useCreateCabin";
-import { useEditCabin } from "./hooks/useEditCabin";
+import { useUpdateCabin } from "./hooks/useUpdateCabin";
 
 type CreateCabinFormProps = {
   cabinToEdit?: Tables<"cabins"> | undefined;
@@ -23,15 +23,15 @@ export default function EditCabinForm({
   const isEditSession = Boolean(cabinToEdit?.id);
 
   const { isCreating, createCabin } = useCreateCabin();
-  const { isEditing, editCabin } = useEditCabin();
+  const { isUpdating, updateCabin } = useUpdateCabin();
 
   const {
     register,
     handleSubmit,
     reset,
     getValues,
-    formState: { errors },
-  } = useForm<newCabin>({
+    formState: { isDirty, errors },
+  } = useForm<NewCabinType>({
     defaultValues: isEditSession
       ? {
           name: cabinToEdit!.name!,
@@ -44,13 +44,11 @@ export default function EditCabinForm({
       : {},
   });
 
-  const isWorking = isCreating || isEditing;
+  const isWorking = isCreating || isUpdating;
 
-  function onSubmit(data: newCabin) {
-    console.log(data);
-
+  function onSubmit(data: NewCabinType) {
     if (isEditSession)
-      editCabin(
+      updateCabin(
         { cabin: data, id: cabinToEdit!.id },
         {
           onSuccess: handleCloseForm,
@@ -151,10 +149,10 @@ export default function EditCabinForm({
 
       <FormRow>
         {/* Type is an HTML attibute */}
-        <Button variation="secondary" type="reset">
+        <Button $variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button disabled={isWorking}>
+        <Button disabled={isWorking || !isDirty}>
           {isEditSession ? "Edit cabin" : "Create new cabin"}
         </Button>
       </FormRow>

@@ -5,7 +5,12 @@ import { Tables } from "../../../types/supabase-type";
 
 type UseDeleteCabinType = {
   isDeleting: boolean;
-  deleteCabin: UseMutateFunction<Tables<"cabins">, Error, number, unknown>;
+  deleteCabin: UseMutateFunction<
+    Tables<"cabins">,
+    Error,
+    Tables<"cabins">["id"],
+    unknown
+  >;
 };
 
 export function useDeleteCabin(): UseDeleteCabinType {

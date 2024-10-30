@@ -4,6 +4,8 @@ import { formatCurrency } from "../../utils/helpers";
 import { useState } from "react";
 import EditCabinForm from "./EditCabinForm";
 import { useDeleteCabin } from "./hooks/useDeleteCabin";
+import { HiPencil, HiSquare2Stack, HiTrash } from "react-icons/hi2";
+import { useCreateCabin } from "./hooks/useCreateCabin";
 
 const TableRow = styled.div`
   display: grid;
@@ -50,6 +52,19 @@ type CabinRowProps = {
 
 export default function CabinRow({ cabin }: CabinRowProps): React.ReactElement {
   const [showForm, setShowForm] = useState<boolean>(false);
+  const { isDeleting, deleteCabin } = useDeleteCabin();
+  const { isCreating, createCabin } = useCreateCabin();
+
+  function handleDuplicate() {
+    createCabin({
+      name: `Copy of ${cabin.name}`,
+      max_capacity: cabin.max_capacity,
+      regular_price: cabin.regular_price,
+      discount: cabin.discount,
+      description: cabin.description,
+      image: cabin.image_url!,
+    });
+  }
 
   const {
     id: cabinId,
@@ -60,8 +75,6 @@ export default function CabinRow({ cabin }: CabinRowProps): React.ReactElement {
     discount,
   } = cabin;
 
-  const { isDeleting, deleteCabin } = useDeleteCabin();
-
   return (
     <>
       <TableRow role="row">
@@ -69,13 +82,20 @@ export default function CabinRow({ cabin }: CabinRowProps): React.ReactElement {
         <Cabin>{name}</Cabin>
         <div>Fits up to {max_capacity} guests</div>
         <Price>{formatCurrency(Number(regular_price))}</Price>
-        <Discount>
-          {discount ? formatCurrency(Number(discount)) : <span>&mdash;</span>}
-        </Discount>
+        {discount ? (
+          <Discount>{formatCurrency(Number(discount))}</Discount>
+        ) : (
+          <span>&mdash;</span>
+        )}
         <div>
-          <button onClick={() => setShowForm((show) => !show)}>Edit</button>
+          <button onClick={() => handleDuplicate()} disabled={isCreating}>
+            <HiSquare2Stack />
+          </button>
+          <button onClick={() => setShowForm((show) => !show)}>
+            <HiPencil />
+          </button>
           <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
-            Delete
+            <HiTrash />
           </button>
         </div>
       </TableRow>

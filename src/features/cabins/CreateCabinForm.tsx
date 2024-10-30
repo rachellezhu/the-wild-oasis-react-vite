@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { createNewCabin, newCabin } from "../../services/apiCabins";
+import { createNewCabin, NewCabinType } from "../../services/apiCabins";
 import { useMutation, useQueryClient } from "react-query";
 import Form from "../../ui/Form";
 import Input from "../../ui/Input";
@@ -9,7 +9,13 @@ import Button from "../../ui/Button";
 import toast from "react-hot-toast";
 import FormRow from "../../ui/FormRow";
 
-export default function CreateCabinForm(): React.ReactElement {
+type CreateCabinFormProps = {
+  onCloseModal?: () => void;
+};
+
+export default function CreateCabinForm({
+  onCloseModal,
+}: CreateCabinFormProps): React.ReactElement {
   const queryClient = useQueryClient();
 
   const {
@@ -18,26 +24,27 @@ export default function CreateCabinForm(): React.ReactElement {
     reset,
     getValues,
     formState: { errors },
-  } = useForm<newCabin>();
+  } = useForm<NewCabinType>();
 
   const { mutate, isLoading: isCreating } = useMutation({
-    mutationFn: (newCabin: newCabin) => createNewCabin(newCabin),
+    mutationFn: (newCabin: NewCabinType) => createNewCabin(newCabin),
     onSuccess: () => {
       toast.success("New cabin successfully created");
       queryClient.invalidateQueries({ queryKey: ["cabins"] });
       reset();
+      onCloseModal?.();
     },
     onError: (error: Error) => {
       toast.error(error.message);
     },
   });
 
-  function onSubmit(data: newCabin) {
+  function onSubmit(data: NewCabinType) {
     mutate(data);
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onSubmit)} type="modal">
       <FormRow label="Cabin name" error={errors.name?.message}>
         <Input
           type="text"
@@ -117,7 +124,11 @@ export default function CreateCabinForm(): React.ReactElement {
 
       <FormRow>
         {/* Type is an HTML attibute */}
-        <Button variation="secondary" type="reset">
+        <Button
+          $variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isCreating}>Add cabin</Button>
