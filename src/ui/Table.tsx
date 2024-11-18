@@ -4,20 +4,14 @@ import { Tables } from "../types/supabase-type";
 
 type Unpacked<T> = T extends (infer U)[] ? U : never;
 
-type CommonRowProps = PropsWithChildren & {
-  $columns: string;
-};
-
-type TableProps = PropsWithChildren & {
-  $columns: string;
-};
-
 type TableProviderProps = {
   $columns: string;
 };
 
+type TableProps = PropsWithChildren & TableProviderProps;
+
 type BodyProps = {
-  data: Tables<"cabins">[] | undefined;
+  data: Tables<'cabins'>[] | undefined;
   render: (param: Unpacked<BodyProps["data"]>) => React.ReactElement;
 };
 
@@ -29,7 +23,7 @@ const StyledTable = styled.div`
   overflow: hidden;
 `;
 
-const CommonRow = styled.div<CommonRowProps>`
+const CommonRow = styled.div<TableProps>`
   display: grid;
   grid-template-columns: ${(props) => props.$columns};
   column-gap: 2.4rem;
@@ -108,7 +102,7 @@ function Row({ children }: PropsWithChildren): React.ReactElement {
   );
 }
 function Body({ data, render }: BodyProps): React.ReactElement {
-  if (!data) return <Empty>No data</Empty>;
+  if (!data) return <Empty>No data to show at the moment</Empty>;
 
   return <StyledBody>{data.map(render)}</StyledBody>;
 }
