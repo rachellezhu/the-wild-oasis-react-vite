@@ -32,3 +32,7 @@ export const formatCurrency = (value: number): string =>
   new Intl.NumberFormat("en", { style: "currency", currency: "USD" }).format(
     value
   );
+
+export const getProperty = <T, K extends keyof T>(obj: T, key: K) => {
+  return typeof obj[key];
+};

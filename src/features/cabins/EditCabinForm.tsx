@@ -8,21 +8,17 @@ import FormRow from "../../ui/FormRow";
 import { useForm } from "react-hook-form";
 import { NewCabinType } from "../../services/apiCabins";
 import { Tables } from "../../types/supabase-type";
-import { useCreateCabin } from "./hooks/useCreateCabin";
 import { useUpdateCabin } from "./hooks/useUpdateCabin";
 
-type CreateCabinFormProps = {
-  cabinToEdit?: Tables<"cabins"> | undefined;
-  handleCloseForm?: () => void;
+type EditCabinFormProps = {
+  onCloseModal?: () => void;
+  cabinToEdit: Tables<"cabins">;
 };
 
 export default function EditCabinForm({
+  onCloseModal,
   cabinToEdit,
-  handleCloseForm,
-}: CreateCabinFormProps): React.ReactElement {
-  const isEditSession = Boolean(cabinToEdit?.id);
-
-  const { isCreating, createCabin } = useCreateCabin();
+}: EditCabinFormProps): React.ReactElement {
   const { isUpdating, updateCabin } = useUpdateCabin();
 
   const {
@@ -32,41 +28,32 @@ export default function EditCabinForm({
     getValues,
     formState: { isDirty, errors },
   } = useForm<NewCabinType>({
-    defaultValues: isEditSession
-      ? {
-          name: cabinToEdit!.name!,
-          max_capacity: cabinToEdit!.max_capacity!,
-          regular_price: cabinToEdit!.regular_price!,
-          discount: cabinToEdit!.discount!,
-          description: cabinToEdit!.description,
-          image: cabinToEdit!.image_url!,
-        }
-      : {},
+    defaultValues: {
+      name: cabinToEdit!.name!,
+      max_capacity: cabinToEdit!.max_capacity!,
+      regular_price: cabinToEdit!.regular_price!,
+      discount: cabinToEdit!.discount!,
+      description: cabinToEdit!.description,
+      image: cabinToEdit!.image_url!,
+    },
   });
 
-  const isWorking = isCreating || isUpdating;
+  const isWorking = isUpdating;
 
   function onSubmit(data: NewCabinType) {
-    if (isEditSession)
-      updateCabin(
-        { cabin: data, id: cabinToEdit!.id },
-        {
-          onSuccess: handleCloseForm,
-          onError: () => {
-            reset();
-          },
-        }
-      );
-    else
-      createCabin(data, {
-        onSuccess: () => {
+    updateCabin(
+      { cabin: data, id: cabinToEdit!.id },
+      {
+        onSuccess: onCloseModal,
+        onError: () => {
           reset();
         },
-      });
+      }
+    );
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onSubmit)} type="modal">
       <FormRow label="Cabin name" error={errors.name?.message}>
         <Input
           type="text"
@@ -140,21 +127,24 @@ export default function EditCabinForm({
             accept="image/*"
             disabled={isWorking}
             {...register("image", {
-              required: isEditSession ? false : "This field is required",
+              required: false,
             })}
           />
-          {isEditSession && <img src={cabinToEdit!.image_url!} alt="image" />}
+          {
+            <img
+              style={{ marginTop: "1rem" }}
+              src={cabinToEdit!.image_url!}
+              alt="image"
+            />
+          }
         </div>
       </FormRow>
 
       <FormRow>
-        {/* Type is an HTML attibute */}
-        <Button $variation="secondary" type="reset">
+        <Button $variation="secondary" type="reset" onClick={onCloseModal}>
           Cancel
         </Button>
-        <Button disabled={isWorking || !isDirty}>
-          {isEditSession ? "Edit cabin" : "Create new cabin"}
-        </Button>
+        <Button disabled={isWorking || !isDirty}>Edit cabin</Button>
       </FormRow>
     </Form>
   );
