@@ -1,5 +1,9 @@
-import React from "react";
+import styled from "styled-components";
 
-export default function TableOperations() {
-  return <div>TableOperations</div>;
-}
+const TableOperations = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+`;
+
+export default TableOperations;
