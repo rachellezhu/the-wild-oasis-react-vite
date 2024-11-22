@@ -21,6 +21,7 @@ const Img = styled.img`
 `;
 
 const Cabin = styled.div`
+  text-align: left;
   font-size: 1.6rem;
   font-weight: 600;
   color: var(--color-grey-600);
@@ -30,12 +31,14 @@ const Cabin = styled.div`
 const Price = styled.div`
   font-family: "Sono";
   font-weight: 600;
+  text-align: right;
 `;
 
 const Discount = styled.div`
   font-family: "Sono";
   font-weight: 500;
   color: var(--color-green-700);
+  text-align: right;
 `;
 
 type CabinRowProps = {
@@ -70,12 +73,12 @@ export default function CabinRow({ cabin }: CabinRowProps): React.ReactElement {
     <Table.Row>
       <Img src={image_url?.toString()} />
       <Cabin>{name}</Cabin>
-      <div>Fits up to {max_capacity} guests</div>
+      <div style={{ textAlign: "left" }}>Fits up to {max_capacity} guests</div>
       <Price>{formatCurrency(Number(regular_price))}</Price>
       {discount ? (
         <Discount>{formatCurrency(Number(discount))}</Discount>
       ) : (
-        <span>&mdash;</span>
+        <span style={{ textAlign: "right" }}>&mdash;</span>
       )}
       <div>
         <Modal>

@@ -63,6 +63,7 @@ export default function Filter({
         <FilterButton
           key={option.value}
           $active={param === option.value}
+          disabled={param === option.value}
           onClick={() => handleClick(option.value)}
         >
           {option.label}
