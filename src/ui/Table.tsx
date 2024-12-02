@@ -1,6 +1,7 @@
 import React, { createContext, PropsWithChildren, useContext } from "react";
 import styled from "styled-components";
 import { Tables } from "../types/supabase-type";
+import { BookingType } from "../types/booking-type";
 
 type Unpacked<T> = T extends (infer U)[] ? U : never;
 
@@ -11,7 +12,7 @@ type TableProviderProps = {
 type TableProps = PropsWithChildren & TableProviderProps;
 
 type BodyProps = {
-  data: Tables<'cabins'>[] | undefined;
+  data: Tables<"cabins">[] | BookingType[] | undefined;
   render: (param: Unpacked<BodyProps["data"]>) => React.ReactElement;
 };
 

@@ -1,10 +1,10 @@
 import { useQuery } from "react-query";
-import { Tables } from "../../../types/supabase-type";
 import { getBookings } from "../../../services/apiBookings";
+import { BookingType } from "../../../types/booking-type";
 
 type UseBookingsType = {
   isLoading: boolean;
-  bookings: Tables<"bookings">[] | undefined;
+  bookings: BookingType[] | undefined;
   error: unknown;
 };
 
@@ -14,7 +14,7 @@ export function useBookings(): UseBookingsType {
     data: bookings,
     error,
   } = useQuery({
-    queryKey: ["cabins"],
+    queryKey: ["bookings"],
     queryFn: getBookings,
   });
 

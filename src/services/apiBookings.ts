@@ -1,16 +1,14 @@
+import { QueryData } from "@supabase/supabase-js";
+import { BookingType, UpdateBookingType } from "../types/booking-type";
 import { Tables } from "../types/supabase-type";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
-type UpdateBookingType = {
-  [Property in keyof Tables<"bookings"> as Exclude<
-    Property,
-    "id" & "created_at"
-  >]?: Tables<"bookings">[Property];
-};
-
-export async function getBookings(): Promise<Tables<"bookings">[]> {
-  const { data, error } = await supabase.from("bookings").select("*");
+export async function getBookings(): Promise<BookingType[]> {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*, cabins(*), guests(*)")
+    .returns<BookingType[]>();
 
   if (error) {
     console.error(error);
@@ -20,11 +18,12 @@ export async function getBookings(): Promise<Tables<"bookings">[]> {
   return data;
 }
 
-export async function getBooking(id: number): Promise<Tables<"bookings">> {
+export async function getBooking(id: number): Promise<BookingType> {
   const { data, error } = await supabase
     .from("bookings")
     .select("*, cabins(*), guests(*)")
     .eq("id", id)
+    .returns<BookingType>()
     .single();
 
   if (error) {

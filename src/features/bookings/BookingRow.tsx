@@ -1,37 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import { Tables } from "../../types/supabase-type";
 import { useNavigate } from "react-router-dom";
 import Table from "../../ui/Table";
 import { format, isToday } from "date-fns";
-import { formatDistanceFromNow } from "../../utils/helpers";
+import { formatCurrency, formatDistanceFromNow } from "../../utils/helpers";
+import Tag from "../../ui/Tag";
+import { BookingType } from "../../types/booking-type";
 
-type CabinType = {
-  cabin: {
-    name: Tables<"cabins">["name"];
-  };
-};
-
-type GuestType = {
-  guest: {
-    full_name: Tables<"guests">["full_name"];
-    email: Tables<"guests">["email"];
-  };
-};
-
-type BookingRowPropsType = CabinType &
-  GuestType & {
-    [Property in keyof Tables<"bookings"> as Exclude<
-      Property,
-      | "cabin_id"
-      | "guest_id"
-      | "cabin_price"
-      | "extras_price"
-      | "has_breakfast"
-      | "is_paid"
-      | "observations"
-    >]: Tables<"bookings">[Property];
-  };
+enum statusToTagName {
+  "unconfirmed" = "blue",
+  "checked-in" = "green",
+  "checked-out" = "silver",
+}
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -52,26 +32,25 @@ const Stacked = styled.div`
 `;
 
 const Amount = styled.div`
+  text-align: end;
   font-family: "Sono";
   font-weight: 500;
 `;
 
-export default function BookingRow(booking: BookingRowPropsType) {
+export default function BookingRow({
+  booking,
+}: {
+  booking: BookingType;
+}): React.ReactElement {
   const navigate = useNavigate();
-
-  const statusToTagName = {
-    unconfirmed: "blue",
-    "checked-in": "green",
-    "checked-out": "silver",
-  };
 
   return (
     <Table.Row>
-      <Cabin>{booking.cabin.name}</Cabin>
+      <Cabin>{booking.cabins.name}</Cabin>
 
       <Stacked>
-        <span>{booking.guest.full_name}</span>
-        <span>{booking.guest.email}</span>
+        <span>{booking.guests.full_name}</span>
+        <span>{booking.guests.email}</span>
       </Stacked>
 
       <Stacked>
@@ -79,7 +58,7 @@ export default function BookingRow(booking: BookingRowPropsType) {
           {isToday(new Date(booking.start_date!))
             ? "Today"
             : formatDistanceFromNow(booking.start_date!)}
-          &nbsp;&rarr;{booking.num_nights} night stay
+          &nbsp;&rarr;&nbsp;{booking.num_nights}&nbsp;night stay
         </span>
         <span>
           {format(new Date(booking.start_date!), "MMM dd yyyy")}
@@ -87,6 +66,12 @@ export default function BookingRow(booking: BookingRowPropsType) {
           {format(new Date(booking.end_date!), "MMM dd yyyy")}
         </span>
       </Stacked>
+
+      <Tag $type={statusToTagName[booking.status!]}>
+        {booking.status?.replace("-", " ")}
+      </Tag>
+
+      <Amount>{formatCurrency(Number(booking.total_price))}</Amount>
     </Table.Row>
   );
 }

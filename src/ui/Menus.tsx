@@ -128,6 +128,8 @@ function Toggle({ id }: ToggleProps): React.ReactElement {
     const el = event.target as Element;
     const rect = el.closest("button")?.getBoundingClientRect();
 
+    console.log(rect);
+
     setPosition({
       x: window.innerWidth - rect!.width - rect!.x,
       y: rect!.y + rect!.height + 8,
