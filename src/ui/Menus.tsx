@@ -128,8 +128,6 @@ function Toggle({ id }: ToggleProps): React.ReactElement {
     const el = event.target as Element;
     const rect = el.closest("button")?.getBoundingClientRect();
 
-    console.log(rect);
-
     setPosition({
       x: window.innerWidth - rect!.width - rect!.x,
       y: rect!.y + rect!.height + 8,
@@ -149,6 +147,11 @@ function List({ id, children }: ListProps): React.ReactElement | null {
   const { openId, $position, close } = useContext(MenusContext);
 
   const ref = useCloseModal(close);
+
+  const main = document.getElementsByTagName("main");
+
+  if (openId) main[0].style.overflow = "hidden";
+  else main[0].style.overflow = "scroll";
 
   if (id !== openId) return null;
 

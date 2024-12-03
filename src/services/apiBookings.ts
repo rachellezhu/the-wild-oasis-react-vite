@@ -1,4 +1,3 @@
-import { QueryData } from "@supabase/supabase-js";
 import { BookingType, UpdateBookingType } from "../types/booking-type";
 import { Tables } from "../types/supabase-type";
 import { getToday } from "../utils/helpers";

@@ -22,7 +22,7 @@ const Label = styled.span`
 `;
 
 type DataItemProps = React.PropsWithChildren & {
-  icon: string;
+  icon: React.ReactElement;
   label: string;
 };
 export default function DataItem({

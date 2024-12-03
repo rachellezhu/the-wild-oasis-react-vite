@@ -1,5 +1,11 @@
 import { Tables } from "./supabase-type";
 
+export enum statusToTagName {
+  "unconfirmed" = "blue",
+  "checked-in" = "green",
+  "checked-out" = "silver",
+}
+
 export type CabinType = {
   cabins: Tables<"cabins">;
 };

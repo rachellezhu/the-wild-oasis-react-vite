@@ -5,13 +5,7 @@ import Table from "../../ui/Table";
 import { format, isToday } from "date-fns";
 import { formatCurrency, formatDistanceFromNow } from "../../utils/helpers";
 import Tag from "../../ui/Tag";
-import { BookingType } from "../../types/booking-type";
-
-enum statusToTagName {
-  "unconfirmed" = "blue",
-  "checked-in" = "green",
-  "checked-out" = "silver",
-}
+import { BookingType, statusToTagName } from "../../types/booking-type";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
