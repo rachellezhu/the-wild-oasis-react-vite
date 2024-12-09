@@ -3,17 +3,27 @@ import { BookingType, UpdateBookingType } from "../types/booking-type";
 import { Tables } from "../types/supabase-type";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
+import { PAGE_SIZE } from "../utils/constants";
 
-type GetBookingsParams = {
+type GetBookingsParamsType = {
   filter?: { field: string; value: string } | null;
   sortBy?: { field: string; direction: string } | null;
+  page?: number;
+};
+
+export type GetBookingsType = {
+  data: BookingType[];
+  count: number | null;
 };
 
 export async function getBookings({
   filter,
   sortBy,
-}: GetBookingsParams): Promise<BookingType[]> {
-  let query = supabase.from("bookings").select("*, cabins(*), guests(*)");
+  page,
+}: GetBookingsParamsType): Promise<GetBookingsType> {
+  let query = supabase
+    .from("bookings")
+    .select("*, cabins(*), guests(*)", { count: "exact" });
 
   if (filter) query = query.eq(filter.field, filter.value);
 
@@ -22,7 +32,13 @@ export async function getBookings({
       ascending: sortBy.direction === "asc",
     });
 
-  const { data, error } = (await query) as PostgrestSingleResponse<
+  if (page) {
+    const from = (page - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    query = query.range(from, to);
+  }
+
+  const { data, error, count } = (await query) as PostgrestSingleResponse<
     BookingType[]
   >;
 
@@ -31,7 +47,7 @@ export async function getBookings({
     throw new Error("Bookings could not be loaded");
   }
 
-  return data;
+  return { data, count };
 }
 
 export async function getBooking(id: number): Promise<BookingType> {

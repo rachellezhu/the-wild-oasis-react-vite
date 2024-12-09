@@ -9,7 +9,7 @@ import Empty from "../../ui/Empty";
 import Pagination from "../../ui/Pagination";
 
 export default function BookingTable(): React.ReactElement {
-  const { bookings, isLoading } = useBookings();
+  const { bookings, count, isLoading } = useBookings();
 
   if (isLoading) return <Spinner />;
 
@@ -35,7 +35,7 @@ export default function BookingTable(): React.ReactElement {
         />
 
         <Table.Footer>
-          <Pagination count={bookings.length} />
+          <Pagination count={count || 0} />
         </Table.Footer>
       </Table>
     </Menus>

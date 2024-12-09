@@ -1,11 +1,11 @@
 import { useQuery } from "react-query";
-import { getBookings } from "../../../services/apiBookings";
-import { BookingType } from "../../../types/booking-type";
+import { getBookings, GetBookingsType } from "../../../services/apiBookings";
 import { useSearchParams } from "react-router-dom";
 
 type UseBookingsType = {
   isLoading: boolean;
-  bookings: BookingType[] | undefined;
+  bookings: GetBookingsType["data"] | undefined;
+  count: GetBookingsType["count"] | undefined;
   error: unknown;
 };
 
@@ -20,15 +20,16 @@ export function useBookings(): UseBookingsType {
   const sortRaw = !sortValue ? "start_date-desc" : sortValue;
   const [field, direction] = sortRaw.split("-");
   const sortBy = { field, direction };
+  const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
 
   const {
     isLoading,
-    data: bookings,
+    data: { data: bookings, count } = {},
     error,
   } = useQuery({
-    queryKey: ["bookings", filter, sortBy],
-    queryFn: () => getBookings({ filter, sortBy }),
+    queryKey: ["bookings", filter, sortBy, page],
+    queryFn: () => getBookings({ filter, sortBy, page }),
   });
 
-  return { isLoading, error, bookings };
+  return { isLoading, error, bookings, count };
 }
