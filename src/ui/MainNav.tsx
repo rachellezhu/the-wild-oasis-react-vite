@@ -89,12 +89,6 @@ export default function MainNav(): React.ReactElement {
             <span>Settings</span>
           </StyledNavLink>
         </li>
-        <li>
-          <StyledNavLink to="/bookings">
-            <HiOutlineCalendarDays />
-            <span>Bookings</span>
-          </StyledNavLink>
-        </li>
       </NavList>
     </nav>
   );

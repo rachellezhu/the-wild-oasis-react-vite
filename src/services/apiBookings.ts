@@ -1,13 +1,30 @@
+import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { BookingType, UpdateBookingType } from "../types/booking-type";
 import { Tables } from "../types/supabase-type";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
-export async function getBookings(): Promise<BookingType[]> {
-  const { data, error } = await supabase
-    .from("bookings")
-    .select("*, cabins(*), guests(*)")
-    .returns<BookingType[]>();
+type GetBookingsParams = {
+  filter?: { field: string; value: string } | null;
+  sortBy?: { field: string; direction: string } | null;
+};
+
+export async function getBookings({
+  filter,
+  sortBy,
+}: GetBookingsParams): Promise<BookingType[]> {
+  let query = supabase.from("bookings").select("*, cabins(*), guests(*)");
+
+  if (filter) query = query.eq(filter.field, filter.value);
+
+  if (sortBy)
+    query = query.order(sortBy.field, {
+      ascending: sortBy.direction === "asc",
+    });
+
+  const { data, error } = (await query) as PostgrestSingleResponse<
+    BookingType[]
+  >;
 
   if (error) {
     console.error(error);

@@ -6,10 +6,13 @@ import Menus from "../../ui/Menus";
 import { useSearchParams } from "react-router-dom";
 import { filterOptions } from "./options";
 import { Tables } from "../../types/supabase-type";
+import Empty from "../../ui/Empty";
 
 export default function CabinTable(): React.ReactElement {
   const { isLoading, cabins } = useCabins();
   const [searchParams] = useSearchParams();
+
+  if (!cabins?.length) return <Empty resource="cabins" />;
 
   const filterValue = searchParams.get("discount") || "all";
   const sortValue = searchParams.get("sortBy") || "name-asc";

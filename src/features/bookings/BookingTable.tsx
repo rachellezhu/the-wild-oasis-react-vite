@@ -5,11 +5,15 @@ import BookingRow from "./BookingRow";
 import { useBookings } from "./hooks/useBookings";
 import Spinner from "../../ui/Spinner";
 import { BookingType } from "../../types/booking-type";
+import Empty from "../../ui/Empty";
+import Pagination from "../../ui/Pagination";
 
 export default function BookingTable(): React.ReactElement {
   const { bookings, isLoading } = useBookings();
 
   if (isLoading) return <Spinner />;
+
+  if (!bookings?.length) return <Empty resource="bookings" />;
 
   return (
     <Menus>
@@ -29,6 +33,10 @@ export default function BookingTable(): React.ReactElement {
             <BookingRow key={booking.id} booking={booking as BookingType} />
           )}
         />
+
+        <Table.Footer>
+          <Pagination count={bookings.length} />
+        </Table.Footer>
       </Table>
     </Menus>
   );
