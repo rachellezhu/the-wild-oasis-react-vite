@@ -6,6 +6,8 @@ import { format, isToday } from "date-fns";
 import { formatCurrency, formatDistanceFromNow } from "../../utils/helpers";
 import Tag from "../../ui/Tag";
 import { BookingType, statusToTagName } from "../../types/booking-type";
+import Menus from "../../ui/Menus";
+import { HiEye } from "react-icons/hi2";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -66,6 +68,18 @@ export default function BookingRow({
       </Tag>
 
       <Amount>{formatCurrency(Number(booking.total_price))}</Amount>
+
+      <Menus.Menu>
+        <Menus.Toggle id={booking.id.toString()} />
+        <Menus.List id={booking.id.toString()}>
+          <Menus.Button
+            icon={<HiEye />}
+            onClick={() => navigate(`/bookings/${booking.id.toString()}`)}
+          >
+            See details
+          </Menus.Button>
+        </Menus.List>
+      </Menus.Menu>
     </Table.Row>
   );
 }
