@@ -54,6 +54,7 @@ export default function Filter({
 
   function handleClick(value: string) {
     searchParams.set(filterField, value);
+    searchParams.delete("page");
     setSearchParams(searchParams);
   }
 
