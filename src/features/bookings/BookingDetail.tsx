@@ -12,6 +12,7 @@ import { useBooking } from "./hooks/useBooking";
 import Spinner from "../../ui/Spinner";
 import Empty from "../../ui/Empty";
 import { useNavigate } from "react-router-dom";
+import { useCheckout } from "../check-in-out/hooks/useCheckout";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -22,6 +23,7 @@ const HeadingGroup = styled.div`
 export default function BookingDetail(): React.ReactElement {
   const { booking, isLoading } = useBooking();
   const navigate = useNavigate();
+  const { checkout, isCheckingOut } = useCheckout();
 
   const moveBack = useMoveBack() as React.MouseEventHandler<HTMLButtonElement>;
 
@@ -49,6 +51,12 @@ export default function BookingDetail(): React.ReactElement {
         {booking.status === "unconfirmed" && (
           <Button onClick={() => navigate(`/checkin/${booking.id}`)}>
             Check in
+          </Button>
+        )}
+
+        {booking.status === "checked-in" && (
+          <Button onClick={() => checkout(booking.id)} disabled={isCheckingOut}>
+            Check out
           </Button>
         )}
       </ButtonGroup>

@@ -29,8 +29,9 @@ type ListProps = ToggleProps & {
 };
 
 type ButtonProps = React.PropsWithChildren & {
-  icon: React.ReactElement;
+  icon?: React.ReactElement;
   onClick?: () => void;
+  disabled?: boolean;
 };
 
 const Menu = styled.div`
@@ -163,7 +164,12 @@ function List({ id, children }: ListProps): React.ReactElement | null {
   );
 }
 
-function Button({ children, icon, onClick }: ButtonProps): React.ReactElement {
+function Button({
+  children,
+  icon,
+  onClick,
+  disabled,
+}: ButtonProps): React.ReactElement {
   const { close } = useContext(MenusContext);
 
   function handleClick() {
@@ -173,7 +179,7 @@ function Button({ children, icon, onClick }: ButtonProps): React.ReactElement {
 
   return (
     <li>
-      <StyledButton onClick={handleClick}>
+      <StyledButton onClick={handleClick} disabled={disabled}>
         {icon}
         <span>{children}</span>
       </StyledButton>

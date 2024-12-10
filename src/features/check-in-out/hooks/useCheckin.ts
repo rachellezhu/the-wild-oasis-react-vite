@@ -30,7 +30,7 @@ type CheckinType = {
   };
 };
 
-export function useChecking(): UseCheckinType {
+export function useCheckin(): UseCheckinType {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 

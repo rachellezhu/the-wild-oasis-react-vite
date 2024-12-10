@@ -12,7 +12,7 @@ import ButtonGroup from "../../ui/ButtonGroup";
 import Button from "../../ui/Button";
 import Checkbox from "../../ui/Checkbox";
 import { formatCurrency } from "../../utils/helpers";
-import { useChecking } from "./hooks/useCheckin";
+import { useCheckin } from "./hooks/useCheckin";
 import { useSettings } from "../settings/hooks/useSettings";
 
 const Box = styled.div`
@@ -28,7 +28,7 @@ export default function CheckinBooking() {
   const [addBreakfast, setAddBreakfast] = useState<boolean>(false);
   const moveBack = useMoveBack() as React.MouseEventHandler<HTMLButtonElement>;
   const { booking, isLoading } = useBooking();
-  const { checkin, isCheckingIn } = useChecking();
+  const { checkin, isCheckingIn } = useCheckin();
   const { settings, isLoading: isLoadingSettings } = useSettings();
 
   useEffect(
