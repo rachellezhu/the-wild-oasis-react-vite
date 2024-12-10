@@ -25,7 +25,7 @@ type ToggleProps = {
 };
 
 type ListProps = ToggleProps & {
-  children: React.ReactElement | React.ReactElement[];
+  children: React.ReactElement | Array<React.ReactElement | boolean>;
 };
 
 type ButtonProps = React.PropsWithChildren & {

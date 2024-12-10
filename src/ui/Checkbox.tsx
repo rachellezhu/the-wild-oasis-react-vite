@@ -26,10 +26,11 @@ const StyledCheckbox = styled.div`
 `;
 
 type CheckboxProps = React.PropsWithChildren & {
-  id: string;
-  checked: boolean;
-  disabled: boolean;
-  onChange: React.ChangeEventHandler<HTMLElement>;
+  id?: string;
+  checked?: boolean;
+  disabled?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLElement>;
+  value?: React.InputHTMLAttributes<HTMLInputElement>["value"];
 };
 
 export default function Checkbox({
@@ -38,6 +39,7 @@ export default function Checkbox({
   onChange,
   disabled,
   children,
+  value,
 }: CheckboxProps): React.ReactElement {
   return (
     <StyledCheckbox>
@@ -47,6 +49,7 @@ export default function Checkbox({
         checked={checked}
         onChange={onChange}
         disabled={disabled}
+        value={value}
       />
       <label htmlFor={!disabled ? id : ""}>{children}</label>
     </StyledCheckbox>
