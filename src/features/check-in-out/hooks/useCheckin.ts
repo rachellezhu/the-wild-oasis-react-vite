@@ -6,7 +6,28 @@ import { Tables } from "../../../types/supabase-type";
 
 type UseCheckinType = {
   isCheckingIn: boolean;
-  checkin: UseMutateFunction<Tables<"bookings">, unknown, number, unknown>;
+  checkin: UseMutateFunction<
+    Tables<"bookings">,
+    unknown,
+    {
+      bookingId: number;
+      breakfast?: {
+        has_breakfast: boolean;
+        extras_price: number;
+        total_price: number;
+      };
+    },
+    unknown
+  >;
+};
+
+type CheckinType = {
+  bookingId: number;
+  breakfast?: {
+    has_breakfast: boolean;
+    extras_price: number;
+    total_price: number;
+  };
 };
 
 export function useChecking(): UseCheckinType {
@@ -14,8 +35,14 @@ export function useChecking(): UseCheckinType {
   const navigate = useNavigate();
 
   const { mutate: checkin, isLoading: isCheckingIn } = useMutation({
-    mutationFn: (bookingId: number) =>
-      updateBooking(bookingId, { status: "check-in", is_paid: true }),
+    mutationFn: ({ bookingId, breakfast }: CheckinType) =>
+      breakfast
+        ? updateBooking(bookingId, {
+            status: "checked-in",
+            is_paid: true,
+            ...breakfast,
+          })
+        : updateBooking(bookingId, { status: "checked-in", is_paid: true }),
     onSuccess: (data: Tables<"bookings">) => {
       toast.success(`Booking #${data.id} successfully checked in`);
       queryClient.invalidateQueries({ active: true });
