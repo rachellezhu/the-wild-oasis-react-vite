@@ -45,7 +45,7 @@ export function useChecking(): UseCheckinType {
         : updateBooking(bookingId, { status: "checked-in", is_paid: true }),
     onSuccess: (data: Tables<"bookings">) => {
       toast.success(`Booking #${data.id} successfully checked in`);
-      queryClient.invalidateQueries({ active: true });
+      queryClient.invalidateQueries();
       navigate("/");
     },
     onError: () => {
