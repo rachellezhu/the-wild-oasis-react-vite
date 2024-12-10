@@ -2,6 +2,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { getBookings, GetBookingsType } from "../../../services/apiBookings";
 import { useSearchParams } from "react-router-dom";
 import { PAGE_SIZE } from "../../../utils/constants";
+import { useState } from "react";
 
 type UseBookingsType = {
   isLoading: boolean;
@@ -12,17 +13,34 @@ type UseBookingsType = {
 
 export function useBookings(): UseBookingsType {
   const queryClient = useQueryClient();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const filterValue = searchParams.get("status");
   const sortValue = searchParams.get("sortBy");
-  const filter =
+  const filterRaw =
     !filterValue || filterValue === "all"
       ? null
       : { field: "status", value: filterValue };
+  const [filter, setFilter] = useState<{
+    field: string;
+    value: string;
+  } | null>(null);
+
   const sortRaw = !sortValue ? "start_date-desc" : sortValue;
   const [field, direction] = sortRaw.split("-");
   const sortBy = { field, direction };
-  const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
+  const pageRaw = !searchParams.get("page")
+    ? 1
+    : Number(searchParams.get("page"));
+  const [page, setPage] = useState<number>(pageRaw);
+
+  if (page !== pageRaw && filter?.value === filterRaw?.value) setPage(pageRaw);
+
+  if (filter?.value !== filterRaw?.value) {
+    searchParams.set("page", "1");
+    setSearchParams(searchParams);
+    setPage(1);
+    setFilter(filterRaw);
+  }
 
   const {
     isLoading,
