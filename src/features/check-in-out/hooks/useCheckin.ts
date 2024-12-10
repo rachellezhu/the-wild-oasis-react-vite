@@ -10,7 +10,7 @@ type UseCheckinType = {
     Tables<"bookings">,
     unknown,
     {
-      bookingId: number;
+      bookingId: Tables<"bookings">["id"];
       breakfast?: {
         has_breakfast: boolean;
         extras_price: number;
@@ -22,7 +22,7 @@ type UseCheckinType = {
 };
 
 type CheckinType = {
-  bookingId: number;
+  bookingId: Tables<"bookings">["id"];
   breakfast?: {
     has_breakfast: boolean;
     extras_price: number;

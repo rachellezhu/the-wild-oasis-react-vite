@@ -126,8 +126,6 @@ export async function updateBooking(
 }
 
 export async function deleteBooking(id: number): Promise<Tables<"bookings">> {
-  // REMEMBER RLS POLICIES
-
   const { data, error } = await supabase
     .from("bookings")
     .delete()
