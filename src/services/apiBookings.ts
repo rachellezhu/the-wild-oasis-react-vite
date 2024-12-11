@@ -125,13 +125,8 @@ export async function updateBooking(
   return data;
 }
 
-export async function deleteBooking(id: number): Promise<Tables<"bookings">> {
-  const { data, error } = await supabase
-    .from("bookings")
-    .delete()
-    .eq("id", id)
-    .select()
-    .single();
+export async function deleteBooking(id: number): Promise<null> {
+  const { data, error } = await supabase.from("bookings").delete().eq("id", id);
 
   if (error) {
     console.error(error);

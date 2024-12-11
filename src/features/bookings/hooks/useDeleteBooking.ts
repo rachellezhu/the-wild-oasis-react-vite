@@ -6,7 +6,7 @@ import { Tables } from "../../../types/supabase-type";
 type UseDeleteBookingType = {
   isDeleting: boolean;
   deleteBooking: UseMutateFunction<
-    Tables<"bookings">,
+    unknown,
     Error,
     Tables<"bookings">["id"],
     unknown
@@ -19,9 +19,9 @@ export function useDeleteBooking(): UseDeleteBookingType {
   const { isLoading: isDeleting, mutate: deleteBooking } = useMutation({
     mutationFn: (bookingId: Tables<"bookings">["id"]) =>
       deleteBookingApi(bookingId),
-    onSuccess: (data: Tables<"bookings">) => {
-      toast.success(`Booking #${data.id} successfully deleted`);
-      queryClient.invalidateQueries();
+    onSuccess: () => {
+      toast.success(`Booking  successfully deleted`);
+      queryClient.invalidateQueries({ queryKey: ["bookings"] });
     },
     onError: (error: Error) => {
       toast.error(error.message);

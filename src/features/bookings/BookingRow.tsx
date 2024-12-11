@@ -80,52 +80,50 @@ export default function BookingRow({
 
       <Amount>{formatCurrency(Number(booking.total_price))}</Amount>
 
-      <div>
-        <Modal>
-          <Menus.Menu>
-            <Menus.Toggle id={booking.id.toString()} />
-            <Menus.List id={booking.id.toString()}>
+      <Modal>
+        <Menus.Menu>
+          <Menus.Toggle id={booking.id.toString()} />
+          <Menus.List id={booking.id.toString()}>
+            <Menus.Button
+              icon={<HiEye />}
+              onClick={() => navigate(`/bookings/${booking.id.toString()}`)}
+            >
+              See details
+            </Menus.Button>
+
+            {booking.status === "unconfirmed" && (
               <Menus.Button
-                icon={<HiEye />}
-                onClick={() => navigate(`/bookings/${booking.id.toString()}`)}
+                icon={<HiArrowDownOnSquare />}
+                onClick={() => navigate(`/checkin/${booking.id}`)}
               >
-                See details
+                Check in
               </Menus.Button>
+            )}
 
-              {booking.status === "unconfirmed" && (
-                <Menus.Button
-                  icon={<HiArrowDownOnSquare />}
-                  onClick={() => navigate(`/checkin/${booking.id}`)}
-                >
-                  Check in
-                </Menus.Button>
-              )}
+            {booking.status === "checked-in" && (
+              <Menus.Button
+                icon={<HiArrowUpOnSquare />}
+                onClick={() => checkout(booking.id)}
+                disabled={isCheckingOut}
+              >
+                Check out
+              </Menus.Button>
+            )}
 
-              {booking.status === "checked-in" && (
-                <Menus.Button
-                  icon={<HiArrowUpOnSquare />}
-                  onClick={() => checkout(booking.id)}
-                  disabled={isCheckingOut}
-                >
-                  Check out
-                </Menus.Button>
-              )}
+            <Modal.Open opens="delete-booking">
+              <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+            </Modal.Open>
+          </Menus.List>
+        </Menus.Menu>
 
-              <Modal.Open opens="delete-booking">
-                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
-              </Modal.Open>
-            </Menus.List>
-          </Menus.Menu>
-
-          <Modal.Window name="delete-booking">
-            <ConfirmDelete
-              resourceName="booking"
-              disabled={isDeleting}
-              onConfirm={() => deleteBooking(booking.id)}
-            />
-          </Modal.Window>
-        </Modal>
-      </div>
+        <Modal.Window name="delete-booking">
+          <ConfirmDelete
+            resourceName="booking"
+            disabled={isDeleting}
+            onConfirm={() => deleteBooking(booking.id)}
+          />
+        </Modal.Window>
+      </Modal>
     </Table.Row>
   );
 }
