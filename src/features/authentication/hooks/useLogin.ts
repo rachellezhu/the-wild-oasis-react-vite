@@ -26,7 +26,7 @@ export function useLogin(): UseLoginType {
       loginApi({ email, password }),
     onSuccess: (user) => {
       queryClient.setQueriesData(["user"], user);
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     },
     onError: (error: Error) => {
       console.error("Error", error);
