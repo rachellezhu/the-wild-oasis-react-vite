@@ -1,5 +1,16 @@
-import React from "react";
+import { BiLoaderAlt } from "react-icons/bi";
+import styled, { keyframes } from "styled-components";
 
-export default function SpinnerMini(): React.ReactElement {
-  return <div>SpinnerMini</div>;
-}
+const rotate = keyframes`
+  to{
+    transform: rotate(1turn);
+  }
+`;
+
+const SpinnerMini = styled(BiLoaderAlt)`
+  width: 2.4rem;
+  height: 2.4rem;
+  animation: ${rotate} 1.5s infinite linear;
+`;
+
+export default SpinnerMini;

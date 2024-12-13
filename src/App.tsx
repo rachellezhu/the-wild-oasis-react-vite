@@ -15,6 +15,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { Toaster } from "react-hot-toast";
 import Booking from "./pages/Booking";
 import Checkin from "./pages/Checkin";
+import ProtectiveRoute from "./ui/ProtectiveRoute";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,7 +32,13 @@ export default function App(): React.ReactElement {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          <Route element={<AppLayout />}>
+          <Route
+            element={
+              <ProtectiveRoute>
+                <AppLayout />
+              </ProtectiveRoute>
+            }
+          >
             <Route index element={<Navigate replace to="dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="bookings" element={<Bookings />} />
