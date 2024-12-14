@@ -5,39 +5,37 @@ import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import { useForm } from "react-hook-form";
 import { EMAIL_REGEX } from "../../utils/constants";
+import { useSignup } from "./hooks/useSignup";
+import { SignupParamsType } from "../../services/apiAuth";
 
 export default function SignupForm(): React.ReactElement {
-  const { register, formState, getValues, handleSubmit } = useForm<{
-    name: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
-  }>({
+  const { register, formState, getValues, handleSubmit, reset } = useForm<
+    SignupParamsType & {
+      password_confirmation: string;
+    }
+  >({
     defaultValues: {
-      name: "",
+      full_name: "",
       email: "",
       password: "",
       password_confirmation: "",
     },
   });
   const { errors } = formState;
+  const { signup, isSigningUp } = useSignup();
 
-  function onSubmit(data: {
-    name: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
-  }) {
-    console.log(data);
+  function onSubmit(data: SignupParamsType) {
+    signup(data, { onSettled: () => reset() });
   }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow label="Full name" error={errors.name?.message}>
+      <FormRow label="Full name" error={errors.full_name?.message}>
         <Input
           type="text"
           id="full-name"
-          {...register("name", { required: "This field is required" })}
+          disabled={isSigningUp}
+          {...register("full_name", { required: "This field is required" })}
         />
       </FormRow>
 
@@ -45,6 +43,7 @@ export default function SignupForm(): React.ReactElement {
         <Input
           type="email"
           id="email"
+          disabled={isSigningUp}
           {...register("email", {
             required: "This field is required",
             pattern: {
@@ -62,6 +61,7 @@ export default function SignupForm(): React.ReactElement {
         <Input
           type="password"
           id="password"
+          disabled={isSigningUp}
           {...register("password", {
             required: "This field is required",
             minLength: {
@@ -79,6 +79,7 @@ export default function SignupForm(): React.ReactElement {
         <Input
           type="password"
           id="password-confirmation"
+          disabled={isSigningUp}
           {...register("password_confirmation", {
             required: "This field is required",
             validate: (value) =>
@@ -88,10 +89,10 @@ export default function SignupForm(): React.ReactElement {
       </FormRow>
 
       <FormRow>
-        <Button $variation="secondary" type="reset">
+        <Button $variation="secondary" type="reset" disabled={isSigningUp}>
           Cancel
         </Button>
-        <Button>Create new user</Button>
+        <Button disabled={isSigningUp}>Create new user</Button>
       </FormRow>
     </Form>
   );

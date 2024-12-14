@@ -1,10 +1,37 @@
 import { AuthTokenResponsePassword, UserResponse } from "@supabase/supabase-js";
 import supabase from "./supabase";
 
+export type SignupParamsType = {
+  full_name: string;
+  email: string;
+  password: string;
+};
+
 type LoginParamsType = {
   email: string;
   password: string;
 };
+
+export async function signup({
+  full_name,
+  email,
+  password,
+}: SignupParamsType): Promise<UserResponse["data"]> {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        full_name,
+        avatar: "",
+      },
+    },
+  });
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
 
 export async function login({
   email,
