@@ -10,7 +10,6 @@ export default function Cabins(): React.ReactElement {
     <>
       <Row type="horizontal">
         <Heading as="h1">All Cabins</Heading>
-
         <CabinTableOperations />
       </Row>
 

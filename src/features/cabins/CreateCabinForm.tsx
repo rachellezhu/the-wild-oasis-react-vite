@@ -57,7 +57,7 @@ export default function CreateCabinForm({
       <FormRow label="Maximum capacity" error={errors.max_capacity?.message}>
         <Input
           type="number"
-          id="max_capacity"
+          id="max-capacity"
           disabled={isCreating}
           {...register("max_capacity", {
             required: "This field is required",
@@ -72,7 +72,7 @@ export default function CreateCabinForm({
       <FormRow label="Regular price" error={errors.regular_price?.message}>
         <Input
           type="number"
-          id="regular_price"
+          id="regular-price"
           disabled={isCreating}
           {...register("regular_price", {
             required: "This field is required",

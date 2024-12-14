@@ -9,7 +9,6 @@ export default function Bookings(): React.ReactElement {
     <>
       <Row type="horizontal">
         <Heading as="h1">All Bookings</Heading>
-
         <BookingTableOperations />
       </Row>
 
