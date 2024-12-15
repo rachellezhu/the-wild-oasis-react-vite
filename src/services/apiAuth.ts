@@ -1,10 +1,10 @@
 import {
   AuthTokenResponsePassword,
-  User,
   UserAttributes,
   UserResponse,
 } from "@supabase/supabase-js";
-import supabase from "./supabase";
+import supabase, { supabaseUrl } from "./supabase";
+import { uploadImage } from "./uploadImage";
 
 export type SignupParamsType = {
   full_name: string;
@@ -17,7 +17,7 @@ type LoginParamsType = {
   password: string;
 };
 
-type UpdateParamsType = {
+export type UpdateUserParamsType = {
   full_name?: string;
   avatar?: File | string;
   password?: string;
@@ -82,10 +82,22 @@ export async function updateUser({
   full_name,
   avatar,
   password,
-}: UpdateParamsType): Promise<UserResponse["data"]> {
+}: UpdateUserParamsType): Promise<UserResponse["data"]> {
   let dataToUpdate: UserAttributes = {
     data: { full_name },
   };
+
+  if (avatar instanceof File) {
+    const uploadedImage = await uploadImage(avatar, "avatars");
+
+    dataToUpdate = {
+      ...dataToUpdate,
+      data: {
+        ...dataToUpdate.data,
+        avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${uploadedImage.path}`,
+      },
+    };
+  }
 
   if (typeof avatar === "string")
     dataToUpdate = { ...dataToUpdate, data: { ...dataToUpdate.data, avatar } };

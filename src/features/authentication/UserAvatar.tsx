@@ -22,7 +22,7 @@ const Avatar = styled.img`
   outline: 2px solid var(--color-grey-100);
 `;
 
-export default function UserAvatar() {
+export default function UserAvatar(): React.ReactElement {
   const { user } = useUser();
   const { avatar, full_name } = user?.user_metadata as {
     avatar: string | undefined;

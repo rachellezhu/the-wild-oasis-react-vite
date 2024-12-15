@@ -4,7 +4,10 @@ import styled from "styled-components";
 type FormRowProps = {
   label?: string | undefined;
   error?: string | undefined;
-  children?: React.ReactElement | React.ReactElement[];
+  children?:
+    | React.ReactElement
+    | React.ReactElement[]
+    | Array<React.ReactElement | boolean>;
 };
 
 const StyledFormRow = styled.div`
