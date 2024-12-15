@@ -1,24 +1,31 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { SignupParamsType } from "../../services/apiAuth";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
+import { useUpdateUser } from "./hooks/useUpdateUser";
+import SpinnerMini from "../../ui/SpinnerMini";
 
 export default function UpdatePassword(): React.ReactElement {
   const { register, handleSubmit, formState, getValues, reset } = useForm<{
     password: string;
     password_confirmation: string;
-  }>();
+  }>({
+    defaultValues: {
+      password: "",
+      password_confirmation: "",
+    },
+  });
   const { errors } = formState;
+  const { updateUser, isUpdating } = useUpdateUser();
 
-  function onSubmit({ password }: SignupParamsType["password"]) {
-    //
+  function onSubmit(data: { password: string; password_confirmation: string }) {
+    updateUser({ password: data.password }, { onSettled: () => reset() });
   }
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow
         label="Password (min 8 characters)"
         error={errors.password?.message}
@@ -54,10 +61,12 @@ export default function UpdatePassword(): React.ReactElement {
       </FormRow>
 
       <FormRow>
-        <Button onClick={() => reset()} type="reset" $variation="secondary">
+        <Button type="reset" $variation="secondary" disabled={isUpdating}>
           Cancel
         </Button>
-        <Button>Update password</Button>
+        <Button disabled={isUpdating}>
+          {isUpdating ? <SpinnerMini /> : "Update password"}
+        </Button>
       </FormRow>
     </Form>
   );

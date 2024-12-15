@@ -6,7 +6,7 @@ export async function uploadImage(
 ): Promise<{ path: string }> {
   const { data, error } = await supabase.storage
     .from(storageName)
-    .upload(image.name, image);
+    .upload(`${Math.random()}-${image.name}`, image);
 
   if (error) throw new Error(error.message);
 

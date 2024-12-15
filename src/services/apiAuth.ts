@@ -83,9 +83,13 @@ export async function updateUser({
   avatar,
   password,
 }: UpdateUserParamsType): Promise<UserResponse["data"]> {
-  let dataToUpdate: UserAttributes = {
-    data: { full_name },
-  };
+  let dataToUpdate: UserAttributes = {};
+
+  if (full_name)
+    dataToUpdate = {
+      ...dataToUpdate,
+      data: { ...dataToUpdate.data, full_name },
+    };
 
   if (avatar instanceof File) {
     const uploadedImage = await uploadImage(avatar, "avatars");

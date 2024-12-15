@@ -22,8 +22,7 @@ export function useUpdateUser(): UseUpdateUserType {
   const { mutate: updateUser, isLoading: isUpdating } = useMutation({
     mutationFn: ({ full_name, avatar, password }: UpdateUserParamsType) =>
       updateUserApi({ full_name, avatar, password }),
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       toast.success("User data successfully updated");
     },
