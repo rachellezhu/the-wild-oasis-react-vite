@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useUser } from "./hooks/useUser";
 
 const StyledUserAvatar = styled.div`
   display: flex;
@@ -22,5 +23,19 @@ const Avatar = styled.img`
 `;
 
 export default function UserAvatar() {
-  return <div>UserAvatar</div>;
+  const { user } = useUser();
+  const { avatar, full_name } = user?.user_metadata as {
+    avatar: string | undefined;
+    full_name: string | undefined;
+  };
+
+  return (
+    <StyledUserAvatar>
+      <Avatar
+        src={avatar || "/img/default-user.jpg"}
+        alt={`Avatar of ${full_name || "user"}`}
+      />
+      <span>{full_name || "User"}</span>
+    </StyledUserAvatar>
+  );
 }
