@@ -1,4 +1,9 @@
-import { AuthTokenResponsePassword, UserResponse } from "@supabase/supabase-js";
+import {
+  AuthTokenResponsePassword,
+  User,
+  UserAttributes,
+  UserResponse,
+} from "@supabase/supabase-js";
 import supabase from "./supabase";
 
 export type SignupParamsType = {
@@ -10,6 +15,12 @@ export type SignupParamsType = {
 type LoginParamsType = {
   email: string;
   password: string;
+};
+
+type UpdateParamsType = {
+  full_name?: string;
+  avatar?: File | string;
+  password?: string;
 };
 
 export async function signup({
@@ -65,4 +76,25 @@ export async function logout() {
   const { error } = await supabase.auth.signOut();
 
   if (error) throw new Error(error.message);
+}
+
+export async function updateUser({
+  full_name,
+  avatar,
+  password,
+}: UpdateParamsType): Promise<UserResponse["data"]> {
+  let dataToUpdate: UserAttributes = {
+    data: { full_name },
+  };
+
+  if (typeof avatar === "string")
+    dataToUpdate = { ...dataToUpdate, data: { ...dataToUpdate.data, avatar } };
+
+  if (password) dataToUpdate = { ...dataToUpdate, password };
+
+  const { data, error } = await supabase.auth.updateUser(dataToUpdate);
+
+  if (error) throw new Error(error.message);
+
+  return data;
 }
