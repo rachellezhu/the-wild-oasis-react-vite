@@ -61,7 +61,12 @@ export default function UpdatePassword(): React.ReactElement {
       </FormRow>
 
       <FormRow>
-        <Button type="reset" $variation="secondary" disabled={isUpdating}>
+        <Button
+          onClick={() => reset()}
+          type="reset"
+          $variation="secondary"
+          disabled={isUpdating}
+        >
           Cancel
         </Button>
         <Button disabled={isUpdating}>
