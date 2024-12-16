@@ -77,7 +77,7 @@ const Button = styled.button`
 
 const ModalContext = createContext<ModalProviderProps>({
   openName: "",
-  open: () => "",
+  open: () => null,
   close,
 });
 
