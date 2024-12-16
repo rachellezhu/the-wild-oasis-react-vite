@@ -19,19 +19,25 @@ export default function UpdateUserDataForm(): React.ReactElement {
     formState: { isDirty, errors },
     handleSubmit,
     getValues,
+    reset,
   } = useForm<UpdateUserParamsType>({
     defaultValues: {
       full_name: user?.user_metadata.full_name || "",
       avatar: user?.user_metadata.avatar || "/img/default-user.jpg",
     },
   });
-  const noData = !getValues("full_name") || !getValues("avatar");
+  const noData = !getValues("full_name");
 
   function onSubmit(data: UpdateUserParamsType) {
     const avatar =
       data.avatar instanceof FileList ? data.avatar[0] : data.avatar;
 
-    updateUser({ full_name: data.full_name, avatar: avatar });
+    updateUser(
+      { full_name: data.full_name, avatar: avatar },
+      {
+        onSuccess: () => reset({ avatar }),
+      }
+    );
   }
 
   return (
@@ -62,16 +68,25 @@ export default function UpdateUserDataForm(): React.ReactElement {
         <FormRow label="Current avatar">
           <img
             src={user?.user_metadata.avatar}
-            style={{ maxWidth: "360px", maxHeight: "auto" }}
+            style={{
+              maxWidth: "240px",
+              maxHeight: "auto",
+              aspectRatio: "auto",
+            }}
             alt={`Avatar of ${user?.user_metadata.full_name}`}
-            width="auto"
+            width="240px"
             height="auto"
           />
         </FormRow>
       )}
 
       <FormRow>
-        <Button type="reset" $variation="secondary" disabled={isUpdating}>
+        <Button
+          type="reset"
+          onClick={() => reset()}
+          $variation="secondary"
+          disabled={isUpdating}
+        >
           Cancel
         </Button>
         <Button disabled={!isDirty || isUpdating || noData}>

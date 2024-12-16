@@ -27,7 +27,7 @@ export default function UpdatePassword(): React.ReactElement {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow
-        label="Password (min 8 characters)"
+        label="New password (min 8 characters)"
         error={errors.password?.message}
       >
         <Input
