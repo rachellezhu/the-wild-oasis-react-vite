@@ -32,7 +32,7 @@ export default function UserAvatar(): React.ReactElement {
   return (
     <StyledUserAvatar>
       <Avatar
-        src={avatar || "/img/default-user.jpg"}
+        src={avatar || "img/default-user.jpg"}
         alt={`Avatar of ${full_name || "user"}`}
       />
       <span>{full_name || "User"}</span>

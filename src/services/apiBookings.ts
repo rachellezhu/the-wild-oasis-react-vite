@@ -66,7 +66,27 @@ export async function getBooking(id: number): Promise<BookingType> {
   return data;
 }
 
+export type GetBookingsAfterDateType = Pick<
+  Tables<"bookings">,
+  "created_at" | "total_price" | "extras_price"
+>;
+
 // Returns all STAYS that we are were created after the given data
+// date: ISOString
+export async function getBookingsAfterDate(
+  date: string
+): Promise<GetBookingsAfterDateType[]> {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("created_at, total_price, extras_price")
+    .gte("created_at", date)
+    .lte("created_at", getToday({ end: true }));
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
 export async function getStaysAfterDate(
   date: string
 ): Promise<Tables<"bookings">[]> {

@@ -55,7 +55,7 @@ const Value = styled.p`
 type StatPropsType = {
   icon: React.ReactElement;
   title: string;
-  value: string;
+  value: string | number;
   color: string;
 };
 
@@ -65,5 +65,11 @@ export default function Stat({
   value,
   color,
 }: StatPropsType): React.ReactElement {
-  return <div>Stat</div>;
+  return (
+    <StyledStat>
+      <Icon color={color}>{icon}</Icon>
+      <Title>{title}</Title>
+      <Value>{value}</Value>
+    </StyledStat>
+  );
 }
