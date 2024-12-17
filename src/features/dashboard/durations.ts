@@ -1,3 +1,5 @@
+import { Tables } from "../../types/supabase-type";
+
 export const startDataLight = [
   {
     duration: "1 night",
@@ -83,3 +85,25 @@ export const startDataDark = [
     color: "#7e22ce",
   },
 ];
+
+export function prepareData(
+  startData: Array<{ duration: string; value: number; color: string }>,
+  stays: Tables<"bookings">[]
+) {
+  // A bit ugly code, but sometimes this is what it takes when working with real data 😅
+
+  function incArrayValue(
+    arr: Array<{}>,
+    field: string
+  ) {
+    return arr.map((obj) =>
+      obj.duration === field ? { ...obj, value: obj.value + 1 } : obj
+    );
+  }
+
+  conse data = stays.reduce((arr, cur)=> {
+    const num = cur.num_nights;
+
+    if(num ===1) return incArrayValue(arr, "1 night")
+  })
+}

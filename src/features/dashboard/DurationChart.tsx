@@ -1,5 +1,16 @@
 import React from "react";
 import styled from "styled-components";
+import { Tables } from "../../types/supabase-type";
+import Heading from "../../ui/Heading";
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
+import { startDataLight } from "./durations";
 
 const ChartBox = styled.div`
   /* Box */
@@ -19,6 +30,47 @@ const ChartBox = styled.div`
   }
 `;
 
-export default function DurationChart() {
-  return <div>DurationChart</div>;
+type DurationChartType = {
+  confirmedStays: Tables<"bookings">[];
+};
+
+export default function DurationChart({
+  confirmedStays,
+}: DurationChartType): React.ReactElement {
+  return (
+    <ChartBox>
+      <Heading as="h2">Stay duration summary</Heading>
+
+      <ResponsiveContainer height={240}>
+        <PieChart>
+          <Pie
+            data={startDataLight}
+            nameKey="duration"
+            dataKey="value"
+            innerRadius={85}
+            outerRadius={110}
+            cx="40%"
+            cy="50%"
+            paddingAngle={3}
+          >
+            {startDataLight.map((entry) => (
+              <Cell
+                fill={entry.color}
+                stroke={entry.color}
+                key={entry.duration}
+              />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend
+            verticalAlign="middle"
+            align="right"
+            layout="vertical"
+            iconSize={15}
+            iconType="circle"
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </ChartBox>
+  );
 }

@@ -11,10 +11,9 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { fakeData } from "./fake-sales";
 import { useDarkMode } from "../../context/DarkModeContext";
-import { Tables } from "../../types/supabase-type";
 import { eachDayOfInterval, format, isSameDay, subDays } from "date-fns";
+import { GetBookingsAfterDateType } from "../../services/apiBookings";
 
 const StyledSalesChart = styled(DashboardBox)`
   grid-column: 1 / -1;
@@ -27,7 +26,7 @@ const StyledSalesChart = styled(DashboardBox)`
 `;
 
 type SalesChartTypes = {
-  bookings?: Tables<"bookings">[];
+  bookings?: GetBookingsAfterDateType[];
   numDays?: number;
 };
 
@@ -69,7 +68,11 @@ export default function SalesChart({
 
   return (
     <StyledSalesChart>
-      <Heading as="h2">Sales</Heading>
+      <Heading as="h2">
+        Sales from {format(allDates.at(0)!, "MMM dd yyyy")}
+        &nbsp;&mdash;&nbsp;
+        {format(allDates.at(-1)!, "MMM dd yyyy")}
+      </Heading>
 
       <ResponsiveContainer height={300} width="100%">
         <AreaChart data={data}>
