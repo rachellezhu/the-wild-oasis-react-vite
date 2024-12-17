@@ -6,6 +6,7 @@ import { useRecentStays } from "./hooks/useRecentStays";
 import Stats from "./Stats";
 import Empty from "../../ui/Empty";
 import { useCabins } from "../cabins/hooks/useCabins";
+import SalesChart from "./SalesChart";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -39,7 +40,7 @@ export default function DashboardLayout(): React.ReactElement {
       />
       <div>Today's activity</div>
       <div>Chart stay durations</div>
-      <div>Chart sales</div>
+      <SalesChart bookings={bookings} numDays={numDays} />
     </StyledDashboardLayout>
   );
 }
