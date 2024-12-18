@@ -10,7 +10,8 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import { startDataLight } from "./durations";
+import { prepareData, startDataDark, startDataLight } from "./durations";
+import { useDarkMode } from "../../context/DarkModeContext";
 
 const ChartBox = styled.div`
   /* Box */
@@ -37,19 +38,23 @@ type DurationChartType = {
 export default function DurationChart({
   confirmedStays,
 }: DurationChartType): React.ReactElement {
+  const { isDarkMode } = useDarkMode();
+  const startData = isDarkMode ? startDataDark : startDataLight;
+  const data = prepareData(startData, confirmedStays);
+
   return (
     <ChartBox>
       <Heading as="h2">Stay duration summary</Heading>
 
-      <ResponsiveContainer height={240}>
+      <ResponsiveContainer width="100%" height={240}>
         <PieChart>
           <Pie
-            data={startDataLight}
+            data={data}
             nameKey="duration"
             dataKey="value"
-            innerRadius={85}
-            outerRadius={110}
-            cx="40%"
+            innerRadius={80}
+            outerRadius={105}
+            cx="50%"
             cy="50%"
             paddingAngle={3}
           >
@@ -63,6 +68,7 @@ export default function DurationChart({
           </Pie>
           <Tooltip />
           <Legend
+            margin={{ left: 0 }}
             verticalAlign="middle"
             align="right"
             layout="vertical"
