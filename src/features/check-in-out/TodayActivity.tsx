@@ -2,8 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import Row from "../../ui/Row";
 import Heading from "../../ui/Heading";
-import { useTodayActivity } from "../dashboard/hooks/useTodayActivity";
 import { format } from "date-fns";
+import { useTodayActivity } from "./hooks/useTodayActivity";
+import Spinner from "../../ui/Spinner";
+import TodayItem from "./TodayItem";
 
 const StyledToday = styled.div`
   /* Box */
@@ -39,18 +41,27 @@ const NoActivity = styled.p`
 `;
 
 export default function TodayActivity(): React.ReactElement {
-  const { today, todayActivity, checkins, checkouts } = useTodayActivity();
-
-  console.log(`today activity: ${todayActivity?.at(0)}`);
-  console.log(`check-in: ${checkins || 0}`);
-  console.log(`check-out: ${checkouts || 0}`);
-  console.log(`date today: ${format(new Date(today), "MMM dd yyyy")}`);
+  const { activities, isGettingStays } = useTodayActivity();
 
   return (
     <StyledToday>
       <Row type="horizontal">
         <Heading as="h2">Today</Heading>
       </Row>
+
+      {!isGettingStays ? (
+        !activities?.length ? (
+          <NoActivity>No activity today...</NoActivity>
+        ) : (
+          <TodayList>
+            {activities.map((activity) => (
+              <TodayItem activity={activity} key={activity.id} />
+            ))}
+          </TodayList>
+        )
+      ) : (
+        <Spinner />
+      )}
     </StyledToday>
   );
 }

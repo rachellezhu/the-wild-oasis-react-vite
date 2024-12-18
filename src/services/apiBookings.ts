@@ -1,5 +1,9 @@
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-import { BookingType, UpdateBookingType } from "../types/booking-type";
+import {
+  BookingType,
+  StatusType,
+  UpdateBookingType,
+} from "../types/booking-type";
 import { Tables } from "../types/supabase-type";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
@@ -105,14 +109,24 @@ export async function getStaysAfterDate(
 }
 
 // Activity means that there is a check in or a check out today
-export async function getStaysTodayActivity(): Promise<Tables<"bookings">[]> {
+export type TodayActivityType = Omit<Tables<"bookings">, "status"> &
+  StatusType & {
+    guests: {
+      full_name: Tables<"guests">["full_name"];
+      nationality: Tables<"guests">["nationality"];
+      country_flag: Tables<"guests">["country_flag"];
+    };
+  };
+
+export async function getStaysTodayActivity(): Promise<TodayActivityType[]> {
   const { data, error } = await supabase
     .from("bookings")
     .select("*, guests(full_name, nationality, country_flag)")
     .or(
       `and(status.eq.unconfirmed,start_date.eq.${getToday()}),and(status.eq.checked-in,end_date.eq.${getToday()})`
     )
-    .order("created_at");
+    .order("created_at")
+    .returns<TodayActivityType[]>();
 
   // Equivalent to this. But by querying this, we only download the data we actually need, otherwise we would need ALL bookings ever created
   // (stay.status === 'unconfirmed' && isToday(new Date(stay.start_date))) ||

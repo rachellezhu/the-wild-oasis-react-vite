@@ -20,7 +20,6 @@ const StyledDashboardLayout = styled.div`
 export default function DashboardLayout(): React.ReactElement {
   const { bookings, isLoading: isLoadingBookings } = useRecentBookings();
   const {
-    stays,
     isLoading: isLoadingStays,
     confirmedStays,
     numDays,

@@ -9,6 +9,8 @@ function fromToday(numDays: number, withTime: boolean = false): string {
   return date.toISOString().slice(0, -1);
 }
 
+console.log(new Date().toISOString().slice(0, -1));
+
 export const bookings: Array<
   Omit<
     Tables<"bookings">,
