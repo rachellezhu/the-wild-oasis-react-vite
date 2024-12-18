@@ -165,7 +165,7 @@ type CheckCabinParamsType = {
 export async function checkCabinIsAvailable({
   fromDate,
   toDate,
-}: CheckCabinParamsType) {
+}: CheckCabinParamsType): Promise<Tables<"cabins">[]> {
   // We take bookings data where date in range of fromDate and toDate
   // eg. we pass into the params fromDate: 1 Jan 2025 and toDate: 5 Jan 2025.
   //  We need all bookings data where start_date in range 1 Jan 2025 to 5 Jan 2025 and
@@ -176,19 +176,25 @@ export async function checkCabinIsAvailable({
   const { data: cabinIdFromBookings, error: bookingsError } = await supabase
     .from("bookings")
     .select("cabin_id")
-    .gte("start_date", [fromDate, toDate])
-    .gte("end_date", [fromDate, toDate]);
+    .lte("start_date", fromDate && toDate)
+    .gte("end_date", fromDate && toDate);
 
-  const { data: cabinIdFromCabin, error: cabinsError } = await supabase
+  const { data: cabins, error: cabinsError } = await supabase
     .from("cabins")
-    .select("id");
+    .select("*");
 
   if (bookingsError || cabinsError)
     throw new Error("Error while getting the data");
 
-  // const availableCabin = cabinIdFromCabin.filter(
-  //   (cabin) =>
-  //     cabin.id !==
-  //     cabinIdFromBookings.filter((cabinBooking) => cabinBooking.cabin_id)
-  // );
+  console.log(cabinIdFromBookings);
+
+  const availableCabin = cabins.filter((cabin) => {
+    for (let i = 0; i <= cabinIdFromBookings.length - 1; i++) {
+      if (cabin.id !== cabinIdFromBookings[i].cabin_id) return cabin;
+    }
+  });
+
+  console.log(availableCabin);
+
+  return availableCabin;
 }
