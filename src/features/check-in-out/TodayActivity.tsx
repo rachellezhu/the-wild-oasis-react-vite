@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import Row from "../../ui/Row";
 import Heading from "../../ui/Heading";
+import { useTodayActivity } from "../dashboard/hooks/useTodayActivity";
+import { format } from "date-fns";
 
 const StyledToday = styled.div`
   /* Box */
@@ -37,6 +39,13 @@ const NoActivity = styled.p`
 `;
 
 export default function TodayActivity(): React.ReactElement {
+  const { today, todayActivity, checkins, checkouts } = useTodayActivity();
+
+  console.log(`today activity: ${todayActivity?.at(0)}`);
+  console.log(`check-in: ${checkins || 0}`);
+  console.log(`check-out: ${checkouts || 0}`);
+  console.log(`date today: ${format(new Date(today), "MMM dd yyyy")}`);
+
   return (
     <StyledToday>
       <Row type="horizontal">

@@ -155,3 +155,40 @@ export async function deleteBooking(id: number): Promise<null> {
 
   return data;
 }
+
+// The date we need is ISO format
+type CheckCabinParamsType = {
+  fromDate: string;
+  toDate: string;
+};
+
+export async function checkCabinIsAvailable({
+  fromDate,
+  toDate,
+}: CheckCabinParamsType) {
+  // We take bookings data where date in range of fromDate and toDate
+  // eg. we pass into the params fromDate: 1 Jan 2025 and toDate: 5 Jan 2025.
+  //  We need all bookings data where start_date in range 1 Jan 2025 to 5 Jan 2025 and
+  // end_date in range 1 Jan 2025 to 5 Jan 2025.
+  // Then we compare the cabin_id from the bookings data we got to the cabins table
+  // if they're same, we exclude them
+
+  const { data: cabinIdFromBookings, error: bookingsError } = await supabase
+    .from("bookings")
+    .select("cabin_id")
+    .gte("start_date", [fromDate, toDate])
+    .gte("end_date", [fromDate, toDate]);
+
+  const { data: cabinIdFromCabin, error: cabinsError } = await supabase
+    .from("cabins")
+    .select("id");
+
+  if (bookingsError || cabinsError)
+    throw new Error("Error while getting the data");
+
+  // const availableCabin = cabinIdFromCabin.filter(
+  //   (cabin) =>
+  //     cabin.id !==
+  //     cabinIdFromBookings.filter((cabinBooking) => cabinBooking.cabin_id)
+  // );
+}
