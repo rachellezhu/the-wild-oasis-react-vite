@@ -200,15 +200,11 @@ export async function checkCabinIsAvailable({
   if (bookingsError || cabinsError)
     throw new Error("Error while getting the data");
 
-  console.log(cabinIdFromBookings);
-
   const availableCabin = cabins.filter((cabin) => {
     for (let i = 0; i <= cabinIdFromBookings.length - 1; i++) {
       if (cabin.id !== cabinIdFromBookings[i].cabin_id) return cabin;
     }
   });
-
-  console.log(availableCabin);
 
   return availableCabin;
 }

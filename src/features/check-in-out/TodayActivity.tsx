@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import Row from "../../ui/Row";
 import Heading from "../../ui/Heading";
-import { format } from "date-fns";
 import { useTodayActivity } from "./hooks/useTodayActivity";
 import Spinner from "../../ui/Spinner";
 import TodayItem from "./TodayItem";

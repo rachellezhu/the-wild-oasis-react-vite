@@ -126,6 +126,8 @@ function Toggle({ id }: ToggleProps): React.ReactElement {
   const { openId, open, close, setPosition } = useContext(MenusContext);
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    event.stopPropagation();
+
     const el = event.target as Element;
     const rect = el.closest("button")?.getBoundingClientRect();
 
@@ -147,7 +149,7 @@ function Toggle({ id }: ToggleProps): React.ReactElement {
 function List({ id, children }: ListProps): React.ReactElement | null {
   const { openId, $position, close } = useContext(MenusContext);
 
-  const ref = useCloseModal(close);
+  const ref = useCloseModal(close, false);
 
   const main = document.getElementsByTagName("main");
 

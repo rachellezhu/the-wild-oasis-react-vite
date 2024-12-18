@@ -23,8 +23,8 @@ function App() {
               <Heading as="h2">Check in and out</Heading>
               <Button onClick={() => alert("Check in")}>Check in</Button>
               <Button
-                variation="secondary"
-                size="medium"
+                $variation="secondary"
+                $size="medium"
                 onClick={() => alert("Check out")}
               >
                 Check out

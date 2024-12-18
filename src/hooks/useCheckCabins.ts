@@ -1,6 +1,5 @@
 import { useQuery } from "react-query";
 import { checkCabinIsAvailable } from "../services/apiBookings";
-import { getToday } from "../utils/helpers";
 
 export function useCheckCabins() {
   const fromDate = new Date("25 Jan 2025");
@@ -16,5 +15,5 @@ export function useCheckCabins() {
   console.log(newFromDate);
   console.log(newToDate);
 
-  return data;
+  return { data, isLoading };
 }

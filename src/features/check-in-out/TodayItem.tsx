@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { TodayActivityType } from "../../services/apiBookings";
 import Tag from "../../ui/Tag";
 import { Flag } from "../../ui/Flag";
-import Checkin from "../../pages/Checkin";
 import CheckoutButton from "./CheckoutButton";
 import Button from "../../ui/Button";
 import { Link } from "react-router-dom";
