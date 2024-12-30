@@ -12,5 +12,3 @@ This project is totally recoded from Jonas Schmedtmann's React Course from JavaS
 - React Icons
 - Recharts
 - styled-components
-
-This project is under maintainance.
