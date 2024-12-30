@@ -6,8 +6,11 @@ This project is totally recoded from Jonas Schmedtmann's React Course from JavaS
 - Vite
 - Supabase (Backend)
 - React Query
+- React Hook Form
+- React Router
 - React Error Boundary
+- React Icons
 - Recharts
-- styled-components [https://styled-components.com/]
+- styled-components
 
 This project is under maintainance.
