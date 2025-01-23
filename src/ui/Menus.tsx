@@ -151,10 +151,10 @@ function List({ id, children }: ListProps): React.ReactElement | null {
 
   const ref = useCloseModal(close, false);
 
-  const main = document.getElementsByTagName("main");
+  // const main = document.getElementsByTagName("main");
 
-  if (openId) main[0].style.overflow = "hidden";
-  else main[0].style.overflow = "scroll";
+  // if (id === openId || openId.length !== 0) main[0].style.overflow = "hidden";
+  // else main[0].style.overflow = "scroll";
 
   if (id !== openId) return null;
 
@@ -174,7 +174,7 @@ function Button({
 }: ButtonProps): React.ReactElement {
   const { close } = useContext(MenusContext);
 
-  function handleClick() {
+  async function handleClick() {
     onClick?.();
     close();
   }
